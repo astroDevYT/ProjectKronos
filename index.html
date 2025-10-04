@@ -105,14 +105,13 @@
         const value = input.value.trim().toUpperCase();
         if (value === 'KRONOS') {
           document.querySelector('.cursor').remove();
-          terminal.innerHTML = '<span class="access-granted">ACCESS GRANTED</span>';
           setTimeout(() => {
             terminal.innerHTML = `
               <div class="menu">
-                <p>1. PROJECT KRONOS</p>
-                <p>2. FILES</p>
-                <p>3. SYSTEM STATUS</p>
-                <p>4. SHUTDOWN</p>
+                <p>1. ISLAND OPERATIONS</p>
+                <p>2. FINANCES</p>
+                <p>3. OMNIDROID META-TRAINING</p>
+                <p>4. SUPERS</p>
               </div>`;
           }, 1500);
         } else {
