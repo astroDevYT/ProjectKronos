@@ -22,10 +22,11 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      width: 100%;
-      height: 70px; /* 50px padding above and below text */
+      width: 0;
+      height: 70px; /* about 50px padding above/below text */
       background-color: rgba(0, 191, 255, 0.2);
       z-index: 1;
+      animation: expandBar 2s ease-out forwards;
     }
 
     .terminal {
@@ -73,14 +74,10 @@
       to { width: 100%; }
     }
 
-    .bar {
-      animation: expandBar 2s ease-out forwards;
-    }
-
     .access-granted {
       font-size: 2rem;
       color: #00ff99;
-      animation: flicker 1.5s infinite alternate;
+      animation: flicker 1.2s infinite alternate;
     }
 
     @keyframes flicker {
@@ -88,12 +85,30 @@
       50% { opacity: 0.6; }
       100% { opacity: 1; }
     }
+
+    .menu {
+      font-size: 1.5rem;
+      text-align: left;
+      display: inline-block;
+      margin-top: 1rem;
+      line-height: 2.2rem;
+      opacity: 0;
+      animation: fadeInMenu 1s forwards;
+      animation-delay: 0.3s;
+    }
+
+    @keyframes fadeInMenu {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
   <div class="bar"></div>
   <div class="terminal" id="terminal">
-    <span>PASSWORD: </span><input type="password" id="passwordInput" class="password-line" autofocus /><span class="cursor"></span>
+    <span>PASSWORD: </span>
+    <input type="password" id="passwordInput" class="password-line" autofocus />
+    <span class="cursor"></span>
   </div>
 
   <script>
@@ -104,7 +119,15 @@
       if (event.key === 'Enter') {
         const value = input.value.trim().toUpperCase();
         if (value === 'KRONOS') {
+          const bar = document.querySelector('.bar');
+          // Re-trigger bar expansion
+          bar.style.animation = 'none';
+          void bar.offsetWidth; // Force reflow
+          bar.style.animation = 'expandBar 1.5s ease-out forwards';
+
           document.querySelector('.cursor').remove();
+          terminal.innerHTML = '<div class="access-granted">ACCESS GRANTED</div>';
+
           setTimeout(() => {
             terminal.innerHTML = `
               <div class="menu">
@@ -113,7 +136,7 @@
                 <p>3. OMNIDROID META-TRAINING</p>
                 <p>4. SUPERS</p>
               </div>`;
-          }, 1500);
+          }, 2000);
         } else {
           input.value = '';
         }
