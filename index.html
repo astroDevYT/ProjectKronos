@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KRONOS Terminal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #00bfff;
+      font-family: 'Orbitron', monospace;
+      overflow: hidden;
+    }
+
+    .bar {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      height: 70px; /* 50px padding above and below text */
+      background-color: rgba(0, 191, 255, 0.2);
+      z-index: 1;
+    }
+
+    .terminal {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      font-size: 2rem;
+      letter-spacing: 3px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .password-line {
+      display: inline-block;
+      border: none;
+      background: none;
+      color: #00bfff;
+      font-family: inherit;
+      font-size: inherit;
+      outline: none;
+      width: 10ch;
+      caret-color: transparent;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 24px;
+      background-color: #00bfff;
+      margin-left: 5px;
+      animation: blink 1s steps(2, start) infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      to { visibility: hidden; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes expandBar {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    .bar {
+      animation: expandBar 2s ease-out forwards;
+    }
+
+    .access-granted {
+      font-size: 2rem;
+      color: #00ff99;
+      animation: flicker 1.5s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar"></div>
+  <div class="terminal" id="terminal">
+    <span>PASSWORD: </span><input type="password" id="passwordInput" class="password-line" autofocus /><span class="cursor"></span>
+  </div>
+
+  <script>
+    const input = document.getElementById('passwordInput');
+    const terminal = document.getElementById('terminal');
+
+    input.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        const value = input.value.trim().toUpperCase();
+        if (value === 'KRONOS') {
+          document.querySelector('.cursor').remove();
+          terminal.innerHTML = '<span class="access-granted">ACCESS GRANTED</span>';
+          setTimeout(() => {
+            terminal.innerHTML = `
+              <div class="menu">
+                <p>1. PROJECT KRONOS</p>
+                <p>2. FILES</p>
+                <p>3. SYSTEM STATUS</p>
+                <p>4. SHUTDOWN</p>
+              </div>`;
+          }, 1500);
+        } else {
+          input.value = '';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
